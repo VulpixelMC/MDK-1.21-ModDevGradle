@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package gay.sylv.examplemod;
 
 import org.slf4j.Logger;
 

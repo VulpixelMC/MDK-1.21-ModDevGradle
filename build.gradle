@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '1.0.20'
+    alias(libs.plugins.moddevgradle)
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -15,6 +15,7 @@ tasks.named('wrapper', Wrapper).configure {
 
 version = mod_version
 group = mod_group_id
+var modId = project.mod_id
 
 repositories {
     mavenLocal()
@@ -29,11 +30,11 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 neoForge {
     // Specify the version of NeoForge to use.
-    version = project.neo_version
+    version = libs.versions.neoforge.asProvider().get()
 
     parchment {
-        mappingsVersion = project.parchment_mappings_version
-        minecraftVersion = project.parchment_minecraft_version
+        mappingsVersion = libs.versions.parchment.get()
+        minecraftVersion = libs.versions.minecraft.asProvider().get()
     }
 
     // This line is optional. Access Transformers are automatically detected
@@ -46,13 +47,13 @@ neoForge {
             client()
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            systemProperty 'neoforge.enabledGameTestNamespaces', modId
         }
 
         server {
             server()
             programArgument '--nogui'
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            systemProperty 'neoforge.enabledGameTestNamespaces', modId
         }
 
         // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -60,7 +61,7 @@ neoForge {
         // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
             type = "gameTestServer"
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+            systemProperty 'neoforge.enabledGameTestNamespaces', modId
         }
 
         data {
@@ -70,7 +71,7 @@ neoForge {
             // gameDirectory = project.file('run-data')
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+            programArguments.addAll '--mod', modId, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
 
         // applies to all the run configs above
@@ -139,11 +140,11 @@ dependencies {
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
     var replaceProperties = [
-            minecraft_version      : minecraft_version,
-            minecraft_version_range: minecraft_version_range,
-            neo_version            : neo_version,
-            neo_version_range      : neo_version_range,
-            loader_version_range   : loader_version_range,
+            minecraft_version      : libs.versions.minecraft.asProvider().get(),
+            minecraft_version_range: libs.versions.minecraft.range.get(),
+            neo_version            : libs.versions.neoforge.asProvider().get(),
+            neo_version_range      : libs.versions.neoforge.range.get(),
+            loader_version_range   : libs.versions.loader.range.get(),
             mod_id                 : mod_id,
             mod_name               : mod_name,
             mod_license            : mod_license,

@@ -1,4 +1,4 @@
-package com.example.examplemod;
+package gay.sylv.examplemod;
 
 import java.util.List;
 import java.util.Set;

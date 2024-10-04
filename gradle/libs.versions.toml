@@ -1,0 +1,26 @@
+[versions]
+# You can find the latest versions here: https://projects.neoforged.net/neoforged/neoforge
+moddevgradle = "1.0.20"
+# The Neo version must agree with the Minecraft version to get a valid artifact
+neoforge = "21.0.167"
+# The Neo version range can use any version of Neo as bounds
+neoforge_range="[21.0.0-beta,)"
+# The Minecraft version must agree with the Neo version to get a valid artifact
+minecraft = "1.21"
+# The Minecraft version range can use any release version of Minecraft as bounds.
+# Snapshots, pre-releases, and release candidates are not guaranteed to sort properly
+# as they do not follow standard versioning conventions.
+minecraft_range = "[1.21,1.21.1)"
+# The loader version range can only use the major version of FML as bounds
+loader_range = "[4,)"
+#read more on this at https://github.com/neoforged/ModDevGradle?tab=readme-ov-file#better-minecraft-parameter-names--javadoc-parchment
+# you can also find the latest versions at: https://parchmentmc.org/docs/getting-started
+parchment = "2024.07.28"
+
+[libraries]
+neoforge = { module = "net.neoforged:neoforge", version.ref = "neoforge" }
+
+[plugins]
+moddevgradle = { id = "net.neoforged.moddev", version.ref = "moddevgradle" }
+
+[bundles]
